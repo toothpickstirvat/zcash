@@ -25,28 +25,40 @@
         <link rel="stylesheet" href="fonts/fonts.css">
 
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" href="highlight.css">
-        <link rel="stylesheet" href="tomorrow-night.css">
-        <link rel="stylesheet" href="ayu-highlight.css">
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
 
 
-        <!-- Provide site root to javascript -->
+        <!-- Provide site root and default themes to javascript -->
         <script>
-            var path_to_root = "";
-            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc.js"></script>
     </head>
     <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
     <div id="body-container">
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
         <script>
             try {
-                var theme = localStorage.getItem('mdbook-theme');
-                var sidebar = localStorage.getItem('mdbook-sidebar');
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
 
                 if (theme.startsWith('"') && theme.endsWith('"')) {
                     localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
@@ -60,7 +72,8 @@
 
         <!-- Set the theme before any content is loaded, prevents flash -->
         <script>
-            var theme;
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
             const html = document.documentElement;
@@ -73,8 +86,8 @@
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
-            var sidebar = null;
-            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
@@ -110,13 +123,14 @@
                             <i class="fa fa-paint-brush"></i>
                         </button>
                         <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
                         </ul>
-                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
                             <i class="fa fa-search"></i>
                         </button>
                     </div>
@@ -153,7 +167,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1>Zcash 6.1.0
+                        <h1>Zcash 6.2.0
 <img align="right" width="120" height="80" src="doc/imgs/logo.png"></h1>
 <h2 id="what-is-zcash"><a class="header" href="#what-is-zcash">What is Zcash?</a></h2>
 <p><a href="https://z.cash/">Zcash</a> is HTTPS for money.</p>
@@ -196,8 +210,8 @@ for instructions on joining the main Zcash network.</p>
 <ul>
 <li>:blue_book: See the documentation at the <a href="https://zcash.readthedocs.io">ReadTheDocs</a>
 for help and more information.</li>
-<li>:incoming_envelope: Ask for help on the <a href="https://forum.z.cash/">Zcash</a> forum.</li>
-<li>:speech_balloon: Join our community on <a href="https://discord.com/invite/zcash">Discord</a></li>
+<li>:incoming_envelope: Ask for help on the <a href="https://forum.zcashcommunity.com/">Zcash forum</a>.</li>
+<li>:speech_balloon: Join our community on the <a href="https://discord.com/invite/zcash">Zcash Global Discord</a>.</li>
 <li>🧑‍🎓: Learn at <a href="https://zechub.wiki/">ZecHub</a></li>
 </ul>
 <p>Participation in the Zcash project is subject to a
@@ -207,7 +221,7 @@ for help and more information.</li>
 <pre><code>./zcutil/build.sh -j$(nproc)
 </code></pre>
 <p>Currently, Zcash is only officially supported on Debian and Ubuntu. See the
-<a href="https://zcash.readthedocs.io/en/latest/rtd_pages/Debian-Ubuntu-build.html">Debian / Ubuntu build</a>
+<a href="https://zcash.readthedocs.io/en/latest/rtd_pages/Debian-Ubuntu-build.html">Debian / Ubuntu build page</a>
 for detailed instructions.</p>
 <h2 id="license"><a class="header" href="#license">License</a></h2>
 <p>For license information see the file <a href="COPYING">COPYING</a>.</p>
@@ -249,8 +263,9 @@ automatically updated during each release. "End of Support" dates are estimated 
 time, and may shift due to changes in network solution power.</p>
 <!-- RELEASE_SCRIPT_START_MARKER - If you make changes here, check make-release.py -->
 <div class="table-wrapper"><table><thead><tr><th><code>zcashd</code> version</th><th>Release date</th><th>Halt height</th><th>End of Support</th></tr></thead><tbody>
-<tr><td>6.0.0</td><td>2024-10-02</td><td>2796400</td><td>2025-01-22</td></tr>
 <tr><td>6.1.0</td><td>2025-01-02</td><td>2901800</td><td>2025-04-24</td></tr>
+<tr><td>6.2.0-rc1</td><td>2025-04-10</td><td>3013824</td><td>2025-07-31</td></tr>
+<tr><td>6.2.0</td><td>2025-04-16</td><td>3021100</td><td>2025-08-06</td></tr>
 </tbody></table>
 </div><!-- RELEASE_SCRIPT_END_MARKER -->
 <div style="break-before: page; page-break-before: always;"></div><h1 id="platform-support"><a class="header" href="#platform-support">Platform Support</a></h1>
@@ -266,7 +281,7 @@ be removed from tier 1. These dates are subject to change.</p>
 <div class="table-wrapper"><table><thead><tr><th>target</th><th>OS</th><th>End of Support</th></tr></thead><tbody>
 <tr><td><code>x86_64-pc-linux-gnu</code></td><td>Debian 11</td><td>June 2026</td></tr>
 <tr><td></td><td>Debian 12</td><td>June 2028</td></tr>
-<tr><td></td><td>Ubuntu 20.04</td><td>April 2025</td></tr>
+<tr><td></td><td>Ubuntu 22.04</td><td>April 2027</td></tr>
 </tbody></table>
 </div>
 <h2 id="tier-2"><a class="header" href="#tier-2">Tier 2</a></h2>
@@ -287,7 +302,7 @@ require builds or tests to pass, so these may or may not work. Official builds a
 available.</p>
 <div class="table-wrapper"><table><thead><tr><th>target</th><th>OS</th><th>notes</th></tr></thead><tbody>
 <tr><td><code>x86_64-pc-linux-gnu</code></td><td>Arch</td><td></td></tr>
-<tr><td></td><td>Ubuntu 22.04</td><td></td></tr>
+<tr><td></td><td>Ubuntu 24.04</td><td></td></tr>
 <tr><td><code>x86_64-unknown-freebsd</code></td><td>FreeBSD</td><td></td></tr>
 <tr><td><code>x86_64-w64-mingw32</code></td><td>Windows</td><td>64-bit MinGW</td></tr>
 <tr><td><code>x86_64-apple-darwin16</code></td><td>macOS 10.14+</td><td></td></tr>
@@ -572,7 +587,7 @@ local instances of <code>prometheus</code> and <code>grafana</code> and provides
 charts several of the various metrics exposed by <code>zcashd</code>'s <code>prometheus</code>
 endpoint. Note that both <code>docker</code> and <code>docker-compose</code> must ordinarily be run
 with superuser permissions (use <code>sudo</code>) when running on Linux.</p>
-<p><code>docker-compose up</code><sup class="footnote-reference"><a href="#1">1</a></sup> will start local instances of <code>prometheus</code> and <code>grafana</code>,
+<p><code>docker-compose up</code><sup class="footnote-reference" id="fr-1-1"><a href="#footnote-1">1</a></sup> will start local instances of <code>prometheus</code> and <code>grafana</code>,
 accessible over HTTP on ports <code>9090</code> and <code>3030</code>, respectively.</p>
 <pre><code>cd &lt;zcash_root&gt;/contrib/metrics
 docker-compose up -d
@@ -624,11 +639,12 @@ docker run --detach -p 9090:9090 --volume prometheus-storage:/prometheus --volum
 # Run Grafana
 docker run --detach -p 3030:3030 --env GF_SERVER_HTTP_PORT=3030 --volume grafana-storage:/var/lib/grafana grafana/grafana
 </code></pre>
-<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<hr>
+<ol class="footnote-definition"><li id="footnote-1">
 <p>This requires a running Docker daemon. See <a href="https://docs.docker.com/config/daemon/start/">the relevant section of the
-Docker Engine manual</a>.</p>
-</div>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="tor-support-in-zcash"><a class="header" href="#tor-support-in-zcash">Tor Support in Zcash</a></h1>
+Docker Engine manual</a>. <a href="#fr-1-1">↩</a></p>
+</li>
+</ol><div style="break-before: page; page-break-before: always;"></div><h1 id="tor-support-in-zcash"><a class="header" href="#tor-support-in-zcash">Tor Support in Zcash</a></h1>
 <p>Tor can be used to provide a layer of network anonymity for Zcash users.
 Additionally, Zcash users may chose to connect only to Tor hidden services, and
 also to expose their own Tor hidden service to allow users to connect to them
@@ -1016,26 +1032,38 @@ be extended beyond this on a case-by-case basis to satisfy user requirements.</p
 will be disabled if <code>-allowdeprecated=none</code> is added to the CLI arguments when starting
 the node, or if an <code>allowdeprecated=none</code> line is added to <code>zcash.conf</code>.</p>
 <div class="table-wrapper"><table><thead><tr><th><code>feature</code></th><th>Deprecated</th><th>Feature details</th></tr></thead><tbody>
-<tr><td><code>z_getbalance</code></td><td>5.0.0</td><td>The <code>z_getbalance</code> RPC method.</td></tr>
 <tr><td><code>z_gettotalbalance</code></td><td>5.0.0</td><td>The <code>z_gettotalbalance</code> RPC method.</td></tr>
-<tr><td><code>gbt_oldhashes</code></td><td>5.4.0</td><td>The <code>finalsaplingroothash</code>, <code>lightclientroothash</code>, and <code>blockcommitmentshash</code> fields in the output of <code>getblocktemplate</code>, which are replaced by the <code>defaultroots</code> field.</td></tr>
-<tr><td><code>deprecationinfo_deprecationheight</code></td><td>5.5.0</td><td>The <code>deprecationheight</code> field returned by the <code>getdeprecationinfo</code> RPC method has been replaced by the <code>end_of_service</code> object.</td></tr>
+<tr><td><code>createrawtransaction</code></td><td>6.2.0</td><td>The <code>createrawtransaction</code> RPC method.</td></tr>
+<tr><td><code>fundrawtransaction</code></td><td>6.2.0</td><td>The <code>fundrawtransaction</code> RPC method.</td></tr>
+<tr><td><code>signrawtransaction</code></td><td>6.2.0</td><td>The <code>signrawtransactions</code> RPC method.</td></tr>
+<tr><td><code>keypoolrefill</code></td><td>6.2.0</td><td>The <code>keypoolrefill</code> RPC method.</td></tr>
+<tr><td><code>settxfee</code></td><td>6.2.0</td><td>The <code>settxfee</code> RPC method.</td></tr>
 </tbody></table>
 </div>
+<p>The <code>createrawtransaction</code>, <code>fundrawtransaction</code>, and <code>signrawtransaction</code> RPC methods are intended to be replaced
+by PCZT-based functionality implemented in Zallet <a href="https://github.com/zcash/wallet/issues/99">zcash/wallet#99</a>.</p>
+<p>The experimental RPC methods <code>z_getpaymentdisclosure</code> and <code>z_validatepaymentdisclosure</code> (which only supported
+Sprout) are also deprecated.</p>
 <h2 id="stage-2"><a class="header" href="#stage-2">Stage 2</a></h2>
 <p>Each feature in the table below may be enabled by adding <code>-allowdeprecated=&lt;feature&gt;</code>
 to the CLI arguments when starting the node, or by adding an <code>allowdeprecated=&lt;feature&gt;</code>
 line to <code>zcash.conf</code>.</p>
-<div class="table-wrapper"><table><thead><tr><th><code>feature</code></th><th>Deprecated</th><th>Feature details</th></tr></thead><tbody>
-<tr><td><code>legacy_privacy</code></td><td>5.0.0</td><td>The default "legacy" privacy policy for <code>z_sendmany</code> has been replaced by the <code>FullPrivacy</code> directive.</td></tr>
-<tr><td><code>getnewaddress</code></td><td>5.0.0</td><td>The <code>getnewaddress</code> RPC method.</td></tr>
-<tr><td><code>getrawchangeaddress</code></td><td>5.0.0</td><td>The <code>getrawchangeaddress</code> RPC method.</td></tr>
-<tr><td><code>z_getnewaddress</code></td><td>5.0.0</td><td>The <code>z_getnewaddress</code> RPC method.</td></tr>
-<tr><td><code>z_listaddresses</code></td><td>5.0.0</td><td>The <code>z_listaddresses</code> RPC method.</td></tr>
-<tr><td><code>addrtype</code></td><td>5.0.0</td><td>The <code>type</code> attribute is deprecated in the results of RPC methods that return address metadata. It is recommended that applications using this metadata be updated to use the <code>pool</code> or <code>address_type</code> attributes, which have replaced the <code>type</code> attribute, as appropriate.</td></tr>
-<tr><td><code>wallettxvjoinsplit</code></td><td>5.1.0</td><td>The <code>vjoinsplit</code> attribute returned by the <code>gettransaction</code> RPC method.</td></tr>
+<div class="table-wrapper"><table><thead><tr><th><code>feature</code></th><th>Deprecated</th><th>Default-disabled</th><th>Feature details</th></tr></thead><tbody>
+<tr><td><code>legacy_privacy</code></td><td>5.0.0</td><td>5.4.0</td><td>The default "legacy" privacy policy for <code>z_sendmany</code> has been replaced by the <code>FullPrivacy</code> directive.</td></tr>
+<tr><td><code>getnewaddress</code></td><td>5.0.0</td><td>5.4.0</td><td>The <code>getnewaddress</code> RPC method.</td></tr>
+<tr><td><code>getrawchangeaddress</code></td><td>5.0.0</td><td>5.4.0</td><td>The <code>getrawchangeaddress</code> RPC method.</td></tr>
+<tr><td><code>z_getnewaddress</code></td><td>5.0.0</td><td>5.4.0</td><td>The <code>z_getnewaddress</code> RPC method.</td></tr>
+<tr><td><code>z_listaddresses</code></td><td>5.0.0</td><td>5.4.0</td><td>The <code>z_listaddresses</code> RPC method.</td></tr>
+<tr><td><code>addrtype</code></td><td>5.0.0</td><td>5.4.0 <code>*</code></td><td>The <code>type</code> attribute is deprecated in the results of RPC methods that return address metadata. It is recommended that applications using this metadata be updated to use the <code>pool</code> or <code>address_type</code> attributes, which have replaced the <code>type</code> attribute, as appropriate.</td></tr>
+<tr><td><code>wallettxvjoinsplit</code></td><td>5.1.0</td><td>5.4.0</td><td>The <code>vjoinsplit</code> attribute returned by the <code>gettransaction</code> RPC method.</td></tr>
+<tr><td><code>z_getbalance</code></td><td>5.0.0</td><td>6.2.0</td><td>The <code>z_getbalance</code> RPC method.</td></tr>
+<tr><td><code>gbt_oldhashes</code></td><td>5.4.0</td><td>6.2.0</td><td>The <code>finalsaplingroothash</code>, <code>lightclientroothash</code>, and <code>blockcommitmentshash</code> fields in the output of <code>getblocktemplate</code>, which are replaced by the <code>defaultroots</code> field.</td></tr>
+<tr><td><code>deprecationinfo_deprecationheight</code></td><td>5.5.0</td><td>6.2.0</td><td>The <code>deprecationheight</code> field returned by the <code>getdeprecationinfo</code> RPC method has been replaced by the <code>end_of_service</code> object.</td></tr>
+<tr><td><code>getnetworkhashps</code></td><td>6.2.0</td><td>6.2.0</td><td>The <code>getnetworkhashps</code> RPC method (use <code>getnetworksolps</code> instead).</td></tr>
 </tbody></table>
-</div><div style="break-before: page; page-break-before: always;"></div><h1 id="developer-documentation"><a class="header" href="#developer-documentation">Developer Documentation</a></h1>
+</div>
+<p><code>*</code> As of version 6.2.0, <code>addrtype</code> is default-disabled even when zcashd is compiled without the <code>ENABLE_WALLET</code> flag.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="developer-documentation"><a class="header" href="#developer-documentation">Developer Documentation</a></h1>
 <p>This section contains documentation aimed at contributors to the <code>zcashd</code> codebase.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="expectations-for-dns-seed-operators"><a class="header" href="#expectations-for-dns-seed-operators">Expectations for DNS Seed operators</a></h1>
 <p>Zcash attempts to minimize the level of trust in DNS seeds,
@@ -1339,7 +1367,7 @@ $
 <div style="break-before: page; page-break-before: always;"></div><h1 id="platform-tier-policy"><a class="header" href="#platform-tier-policy">Platform Tier Policy</a></h1>
 <h2 id="general"><a class="header" href="#general">General</a></h2>
 <p>ECC provides three tiers of platform support, modeled after the
-<a href="https://doc.rust-lang.org/stable/rustc/platform-tier-policy.html">Rust Target Tier Policy</a>:</p>
+<a href="https://doc.rust-lang.org/stable/rustc/target-tier-policy.html">Rust Target Tier Policy</a>:</p>
 <ul>
 <li>The Zcash developers provide no guarantees about tier 3 platforms; they exist in the
 codebase, but may or may not build.</li>

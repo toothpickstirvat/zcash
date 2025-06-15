@@ -24,28 +24,40 @@
         <link rel="stylesheet" href="../fonts/fonts.css">
 
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" href="../highlight.css">
-        <link rel="stylesheet" href="../tomorrow-night.css">
-        <link rel="stylesheet" href="../ayu-highlight.css">
+        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
 
 
-        <!-- Provide site root to javascript -->
+        <!-- Provide site root and default themes to javascript -->
         <script>
-            var path_to_root = "../";
-            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc.js"></script>
     </head>
     <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
     <div id="body-container">
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
         <script>
             try {
-                var theme = localStorage.getItem('mdbook-theme');
-                var sidebar = localStorage.getItem('mdbook-sidebar');
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
 
                 if (theme.startsWith('"') && theme.endsWith('"')) {
                     localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
@@ -59,7 +71,8 @@
 
         <!-- Set the theme before any content is loaded, prevents flash -->
         <script>
-            var theme;
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
             const html = document.documentElement;
@@ -72,8 +85,8 @@
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
-            var sidebar = null;
-            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
@@ -109,13 +122,14 @@
                             <i class="fa fa-paint-brush"></i>
                         </button>
                         <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
                         </ul>
-                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
                             <i class="fa fa-search"></i>
                         </button>
                     </div>
@@ -182,26 +196,38 @@ be extended beyond this on a case-by-case basis to satisfy user requirements.</p
 will be disabled if <code>-allowdeprecated=none</code> is added to the CLI arguments when starting
 the node, or if an <code>allowdeprecated=none</code> line is added to <code>zcash.conf</code>.</p>
 <div class="table-wrapper"><table><thead><tr><th><code>feature</code></th><th>Deprecated</th><th>Feature details</th></tr></thead><tbody>
-<tr><td><code>z_getbalance</code></td><td>5.0.0</td><td>The <code>z_getbalance</code> RPC method.</td></tr>
 <tr><td><code>z_gettotalbalance</code></td><td>5.0.0</td><td>The <code>z_gettotalbalance</code> RPC method.</td></tr>
-<tr><td><code>gbt_oldhashes</code></td><td>5.4.0</td><td>The <code>finalsaplingroothash</code>, <code>lightclientroothash</code>, and <code>blockcommitmentshash</code> fields in the output of <code>getblocktemplate</code>, which are replaced by the <code>defaultroots</code> field.</td></tr>
-<tr><td><code>deprecationinfo_deprecationheight</code></td><td>5.5.0</td><td>The <code>deprecationheight</code> field returned by the <code>getdeprecationinfo</code> RPC method has been replaced by the <code>end_of_service</code> object.</td></tr>
+<tr><td><code>createrawtransaction</code></td><td>6.2.0</td><td>The <code>createrawtransaction</code> RPC method.</td></tr>
+<tr><td><code>fundrawtransaction</code></td><td>6.2.0</td><td>The <code>fundrawtransaction</code> RPC method.</td></tr>
+<tr><td><code>signrawtransaction</code></td><td>6.2.0</td><td>The <code>signrawtransactions</code> RPC method.</td></tr>
+<tr><td><code>keypoolrefill</code></td><td>6.2.0</td><td>The <code>keypoolrefill</code> RPC method.</td></tr>
+<tr><td><code>settxfee</code></td><td>6.2.0</td><td>The <code>settxfee</code> RPC method.</td></tr>
 </tbody></table>
 </div>
+<p>The <code>createrawtransaction</code>, <code>fundrawtransaction</code>, and <code>signrawtransaction</code> RPC methods are intended to be replaced
+by PCZT-based functionality implemented in Zallet <a href="https://github.com/zcash/wallet/issues/99">zcash/wallet#99</a>.</p>
+<p>The experimental RPC methods <code>z_getpaymentdisclosure</code> and <code>z_validatepaymentdisclosure</code> (which only supported
+Sprout) are also deprecated.</p>
 <h2 id="stage-2"><a class="header" href="#stage-2">Stage 2</a></h2>
 <p>Each feature in the table below may be enabled by adding <code>-allowdeprecated=&lt;feature&gt;</code>
 to the CLI arguments when starting the node, or by adding an <code>allowdeprecated=&lt;feature&gt;</code>
 line to <code>zcash.conf</code>.</p>
-<div class="table-wrapper"><table><thead><tr><th><code>feature</code></th><th>Deprecated</th><th>Feature details</th></tr></thead><tbody>
-<tr><td><code>legacy_privacy</code></td><td>5.0.0</td><td>The default "legacy" privacy policy for <code>z_sendmany</code> has been replaced by the <code>FullPrivacy</code> directive.</td></tr>
-<tr><td><code>getnewaddress</code></td><td>5.0.0</td><td>The <code>getnewaddress</code> RPC method.</td></tr>
-<tr><td><code>getrawchangeaddress</code></td><td>5.0.0</td><td>The <code>getrawchangeaddress</code> RPC method.</td></tr>
-<tr><td><code>z_getnewaddress</code></td><td>5.0.0</td><td>The <code>z_getnewaddress</code> RPC method.</td></tr>
-<tr><td><code>z_listaddresses</code></td><td>5.0.0</td><td>The <code>z_listaddresses</code> RPC method.</td></tr>
-<tr><td><code>addrtype</code></td><td>5.0.0</td><td>The <code>type</code> attribute is deprecated in the results of RPC methods that return address metadata. It is recommended that applications using this metadata be updated to use the <code>pool</code> or <code>address_type</code> attributes, which have replaced the <code>type</code> attribute, as appropriate.</td></tr>
-<tr><td><code>wallettxvjoinsplit</code></td><td>5.1.0</td><td>The <code>vjoinsplit</code> attribute returned by the <code>gettransaction</code> RPC method.</td></tr>
+<div class="table-wrapper"><table><thead><tr><th><code>feature</code></th><th>Deprecated</th><th>Default-disabled</th><th>Feature details</th></tr></thead><tbody>
+<tr><td><code>legacy_privacy</code></td><td>5.0.0</td><td>5.4.0</td><td>The default "legacy" privacy policy for <code>z_sendmany</code> has been replaced by the <code>FullPrivacy</code> directive.</td></tr>
+<tr><td><code>getnewaddress</code></td><td>5.0.0</td><td>5.4.0</td><td>The <code>getnewaddress</code> RPC method.</td></tr>
+<tr><td><code>getrawchangeaddress</code></td><td>5.0.0</td><td>5.4.0</td><td>The <code>getrawchangeaddress</code> RPC method.</td></tr>
+<tr><td><code>z_getnewaddress</code></td><td>5.0.0</td><td>5.4.0</td><td>The <code>z_getnewaddress</code> RPC method.</td></tr>
+<tr><td><code>z_listaddresses</code></td><td>5.0.0</td><td>5.4.0</td><td>The <code>z_listaddresses</code> RPC method.</td></tr>
+<tr><td><code>addrtype</code></td><td>5.0.0</td><td>5.4.0 <code>*</code></td><td>The <code>type</code> attribute is deprecated in the results of RPC methods that return address metadata. It is recommended that applications using this metadata be updated to use the <code>pool</code> or <code>address_type</code> attributes, which have replaced the <code>type</code> attribute, as appropriate.</td></tr>
+<tr><td><code>wallettxvjoinsplit</code></td><td>5.1.0</td><td>5.4.0</td><td>The <code>vjoinsplit</code> attribute returned by the <code>gettransaction</code> RPC method.</td></tr>
+<tr><td><code>z_getbalance</code></td><td>5.0.0</td><td>6.2.0</td><td>The <code>z_getbalance</code> RPC method.</td></tr>
+<tr><td><code>gbt_oldhashes</code></td><td>5.4.0</td><td>6.2.0</td><td>The <code>finalsaplingroothash</code>, <code>lightclientroothash</code>, and <code>blockcommitmentshash</code> fields in the output of <code>getblocktemplate</code>, which are replaced by the <code>defaultroots</code> field.</td></tr>
+<tr><td><code>deprecationinfo_deprecationheight</code></td><td>5.5.0</td><td>6.2.0</td><td>The <code>deprecationheight</code> field returned by the <code>getdeprecationinfo</code> RPC method has been replaced by the <code>end_of_service</code> object.</td></tr>
+<tr><td><code>getnetworkhashps</code></td><td>6.2.0</td><td>6.2.0</td><td>The <code>getnetworkhashps</code> RPC method (use <code>getnetworksolps</code> instead).</td></tr>
 </tbody></table>
 </div>
+<p><code>*</code> As of version 6.2.0, <code>addrtype</code> is default-disabled even when zcashd is compiled without the <code>ENABLE_WALLET</code> flag.</p>
+
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">

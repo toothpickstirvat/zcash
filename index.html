@@ -24,28 +24,40 @@
         <link rel="stylesheet" href="fonts/fonts.css">
 
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" href="highlight.css">
-        <link rel="stylesheet" href="tomorrow-night.css">
-        <link rel="stylesheet" href="ayu-highlight.css">
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
 
 
-        <!-- Provide site root to javascript -->
+        <!-- Provide site root and default themes to javascript -->
         <script>
-            var path_to_root = "";
-            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc.js"></script>
     </head>
     <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
     <div id="body-container">
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
         <script>
             try {
-                var theme = localStorage.getItem('mdbook-theme');
-                var sidebar = localStorage.getItem('mdbook-sidebar');
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
 
                 if (theme.startsWith('"') && theme.endsWith('"')) {
                     localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
@@ -59,7 +71,8 @@
 
         <!-- Set the theme before any content is loaded, prevents flash -->
         <script>
-            var theme;
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
             const html = document.documentElement;
@@ -72,8 +85,8 @@
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
-            var sidebar = null;
-            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
@@ -109,13 +122,14 @@
                             <i class="fa fa-paint-brush"></i>
                         </button>
                         <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
                         </ul>
-                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
                             <i class="fa fa-search"></i>
                         </button>
                     </div>
@@ -152,7 +166,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1>Zcash 6.1.0
+                        <h1>Zcash 6.2.0
 <img align="right" width="120" height="80" src="doc/imgs/logo.png"></h1>
 <h2 id="what-is-zcash"><a class="header" href="#what-is-zcash">What is Zcash?</a></h2>
 <p><a href="https://z.cash/">Zcash</a> is HTTPS for money.</p>
@@ -195,8 +209,8 @@ for instructions on joining the main Zcash network.</p>
 <ul>
 <li>:blue_book: See the documentation at the <a href="https://zcash.readthedocs.io">ReadTheDocs</a>
 for help and more information.</li>
-<li>:incoming_envelope: Ask for help on the <a href="https://forum.z.cash/">Zcash</a> forum.</li>
-<li>:speech_balloon: Join our community on <a href="https://discord.com/invite/zcash">Discord</a></li>
+<li>:incoming_envelope: Ask for help on the <a href="https://forum.zcashcommunity.com/">Zcash forum</a>.</li>
+<li>:speech_balloon: Join our community on the <a href="https://discord.com/invite/zcash">Zcash Global Discord</a>.</li>
 <li>🧑‍🎓: Learn at <a href="https://zechub.wiki/">ZecHub</a></li>
 </ul>
 <p>Participation in the Zcash project is subject to a
@@ -206,7 +220,7 @@ for help and more information.</li>
 <pre><code>./zcutil/build.sh -j$(nproc)
 </code></pre>
 <p>Currently, Zcash is only officially supported on Debian and Ubuntu. See the
-<a href="https://zcash.readthedocs.io/en/latest/rtd_pages/Debian-Ubuntu-build.html">Debian / Ubuntu build</a>
+<a href="https://zcash.readthedocs.io/en/latest/rtd_pages/Debian-Ubuntu-build.html">Debian / Ubuntu build page</a>
 for detailed instructions.</p>
 <h2 id="license"><a class="header" href="#license">License</a></h2>
 <p>For license information see the file <a href="COPYING">COPYING</a>.</p>
